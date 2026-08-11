@@ -67,19 +67,19 @@
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-success" onclick="addShamShipment()"><i class="fas fa-plus"></i> حفظ</button>
-                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل</button>
+                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل (ديسك توب)</button>
                     <button class="btn btn-new-manifest" onclick="startNewManifest()"><i class="fas fa-sync-alt"></i> مانيفست جديد</button>
                 </div>
             </div>
 
-            <!-- قسم الفلاتر المتقدمة (حسب الزبون، السائق، التاريخ) -->
+            <!-- قسم الفلاتر المتقدمة -->
             <div class="filter-section">
                 <div class="form-group" style="margin:0;">
-                    <label><i class="fas fa-filter"></i> فلترة حسب الزبون (المرسل إليه):</label>
+                    <label><i class="fas fa-filter"></i> فلترة حسب الزبون:</label>
                     <input type="text" id="searchCustomer" class="search-box" placeholder="ابحث باسم الزبون..." onkeyup="renderShamTable()">
                 </div>
                 <div class="form-group" style="margin:0;">
-                    <label><i class="fas fa-truck"></i> فلترة حسب السائق / المركز:</label>
+                    <label><i class="fas fa-truck"></i> فلترة حسب السائق:</label>
                     <input type="text" id="searchDriver" class="search-box" placeholder="ابحث باسم السائق..." onkeyup="renderShamTable()">
                 </div>
                 <div class="form-group" style="margin:0;">
@@ -127,7 +127,7 @@
         function renderShamTable() {
             let custFilter = document.getElementById("searchCustomer").value.toLowerCase();
             let driverFilter = document.getElementById("searchDriver").value.toLowerCase();
-            let dateFilter = document.getElementById("searchDate").value; // صيغة التاريخ yyyy-mm-dd
+            let dateFilter = document.getElementById("searchDate").value;
             
             let tbody = document.getElementById("shamTableBody");
             tbody.innerHTML = "";
@@ -135,14 +135,10 @@
             let filtered = shamRecords.filter(r => {
                 let matchCust = r.receiver.toLowerCase().includes(custFilter) || r.opNum.toLowerCase().includes(custFilter);
                 let matchDriver = r.driver.toLowerCase().includes(driverFilter);
-                
-                // مطابقة التاريخ إذا تم اختياره
                 let matchDate = true;
                 if(dateFilter) {
-                    // r.rawDate مخزن بصيغة yyyy-mm-dd للمقارنة الدقيقة
                     matchDate = r.rawDate === dateFilter;
                 }
-
                 return matchCust && matchDriver && matchDate;
             });
 
@@ -178,7 +174,7 @@
 
             let now = new Date();
             let dateTimeStr = now.toLocaleDateString('ar-SY') + ' (' + now.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) + ')';
-            let rawDateStr = now.toISOString().slice(0, 10); // للحفظ بصيغة يسهل فلترتها
+            let rawDateStr = now.toISOString().slice(0, 10);
 
             let record = {
                 dateTime: dateTimeStr,
@@ -200,7 +196,6 @@
             shamRecords.unshift(record);
             localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
             
-            // تفريغ الحقول بعد الإدخال
             document.getElementById("shamOpNum").value = "";
             document.getElementById("shamReceiver").value = "";
             document.getElementById("shamDriver").value = "";
@@ -242,7 +237,7 @@
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = `Manifest_${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `Sham_Manifest_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
         }
 
