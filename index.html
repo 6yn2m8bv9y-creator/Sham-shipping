@@ -15,6 +15,7 @@
         .form-group { text-align: right; }
         label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px; color: var(--text-main); }
         input, select { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-size: 13px; background: #fff; color: var(--text-main); outline: none; }
+        .search-box { width: 100%; padding: 10px; border: 2px solid var(--accent-blue); border-radius: 8px; margin-bottom: 10px; font-size: 14px; }
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
         .btn { background: var(--accent-blue); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 140px; }
         .btn-success { background: var(--success); }
@@ -35,114 +36,51 @@
     <div class="container">
         <div class="card">
             <div class="app-header">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 16px;">
-                        <i class="fas fa-shipping-fast"></i>
-                    </div>
-                    <div>
-                        <h2 style="margin:0; font-size: 15px;">الشام للشحن - العالمية</h2>
-                        <span style="font-size: 11px; color: var(--sub-text); font-weight: 600;">نظام إدارة البوليصات المتقدم</span>
-                    </div>
+                <div>
+                    <h2 style="margin:0; font-size: 15px;">الشام للشحن - العالمية</h2>
+                    <span style="font-size: 11px; color: var(--sub-text); font-weight: 600;">نظام إدارة البوليصات</span>
                 </div>
                 <div id="currentDateDisplay" style="font-size: 12px; font-weight: bold; color: var(--accent-blue);"></div>
             </div>
 
-            <!-- لوحة الإحصائيات والأوزان الإجمالية -->
             <div class="stats-box">
                 <div class="stat-card" id="totalWeightBox">إجمالي الأوزان: 0 كغ</div>
                 <div class="stat-card" id="totalCountBox">إجمالي البوليصات: 0</div>
             </div>
 
-            <!-- نموذج الإدخال الشامل -->
             <div style="background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 12px;">
-                <h4 style="margin-top:0; color:var(--accent-blue); font-size:13px;"><i class="fas fa-plus-circle"></i> إضافة بوليصة جديدة</h4>
-                
+                <h4 style="margin-top:0; color:var(--accent-blue); font-size:13px;"><i class="fas fa-plus-circle"></i> إضافة بوليصة</h4>
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>رقم البوليصة:</label>
-                        <input type="text" id="shamOpNum" placeholder="مثال: 1005">
-                    </div>
-                    <div class="form-group">
-                        <label>خط الرحلة:</label>
-                        <select id="shamTripDirection">
-                            <option value="دمشق">دمشق</option>
-                            <option value="حلب">حلب</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>المرسل إليه:</label>
-                        <input type="text" id="shamReceiver" placeholder="اسم المرسل إليه">
-                    </div>
-                    <div class="form-group">
-                        <label>السائق / مركز الكلفة:</label>
-                        <input type="text" id="shamDriver" placeholder="اسم السائق أو المركز">
-                    </div>
-                    <div class="form-group">
-                        <label>نوع البضاعة:</label>
-                        <input type="text" id="shamMaterial" placeholder="مثال: إلكترونيات، أقمشة...">
-                    </div>
-                    <div class="form-group">
-                        <label>نوع الطرد:</label>
-                        <input type="text" id="shamBoxType" placeholder="كرتونة / شوال / برميل">
-                    </div>
-                    <div class="form-group">
-                        <label>الوزن (كغ):</label>
-                        <input type="number" step="0.1" id="shamWeight" placeholder="0.0">
-                    </div>
-                    <div class="form-group">
-                        <label>أجور الشحن:</label>
-                        <input type="number" id="shamFreightCost" placeholder="المبلغ">
-                    </div>
-                    <div class="form-group">
-                        <label>قيمة الحوالة (إن وجدت):</label>
-                        <input type="number" id="shamTransferAmount" placeholder="قيمة الحوالة">
-                    </div>
-                    <div class="form-group">
-                        <label>اسم المرسل:</label>
-                        <input type="text" id="shamSenderName" placeholder="اسم المرسل">
-                    </div>
-                    <div class="form-group">
-                        <label>صاحب الحوالة:</label>
-                        <input type="text" id="shamTransferOwner" placeholder="اسم صاحب الحوالة">
-                    </div>
-                    <div class="form-group">
-                        <label>رقم هاتف المرسل:</label>
-                        <input type="text" id="shamSenderPhone" placeholder="رقم للتواصل">
-                    </div>
+                    <input type="text" id="shamOpNum" placeholder="رقم البوليصة">
+                    <select id="shamTripDirection"><option value="دمشق">دمشق</option><option value="حلب">حلب</option></select>
+                    <input type="text" id="shamReceiver" placeholder="اسم المرسل إليه">
+                    <input type="text" id="shamDriver" placeholder="السائق / مركز الكلفة">
+                    <input type="text" id="shamMaterial" placeholder="نوع البضاعة">
+                    <input type="text" id="shamBoxType" placeholder="نوع الطرد">
+                    <input type="number" step="0.1" id="shamWeight" placeholder="الوزن (كغ)">
+                    <input type="number" id="shamFreightCost" placeholder="أجور الشحن">
+                    <input type="number" id="shamTransferAmount" placeholder="قيمة الحوالة">
+                    <input type="text" id="shamSenderName" placeholder="اسم المرسل">
+                    <input type="text" id="shamTransferOwner" placeholder="صاحب الحوالة">
+                    <input type="text" id="shamSenderPhone" placeholder="رقم الهاتف">
                 </div>
-
                 <div class="btn-group">
-                    <button class="btn btn-success" onclick="addShamShipment()"><i class="fas fa-plus"></i> حفظ البوليصة</button>
-                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل أرشيف</button>
-                    <button class="btn btn-new-manifest" onclick="startNewManifest()"><i class="fas fa-sync-alt"></i> مانيفست جديد (تفريغ الشاشة)</button>
+                    <button class="btn btn-success" onclick="addShamShipment()"><i class="fas fa-plus"></i> حفظ</button>
+                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل</button>
+                    <button class="btn btn-new-manifest" onclick="startNewManifest()"><i class="fas fa-sync-alt"></i> مانيفست جديد</button>
                 </div>
             </div>
 
-            <!-- جدول العرض -->
-            <h4 style="margin-bottom: 5px; color: var(--accent-blue); font-size: 12px;"><i class="fas fa-list"></i> سجل البوليصات والرحلات الحالية</h4>
+            <input type="text" id="searchBox" class="search-box" placeholder="🔍 ابحث هنا بالاسم أو رقم البوليصة..." onkeyup="renderShamTable()">
+            
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th>التاريخ / اليوم</th>
-                            <th>رقم البوليصة</th>
-                            <th>الرحلة</th>
-                            <th>مرسل إليه</th>
-                            <th>السائق / مركز الكلفة</th>
-                            <th>نوع البضاعة</th>
-                            <th>الطرد</th>
-                            <th>الوزن</th>
-                            <th>أجور الشحن</th>
-                            <th>الحوالة</th>
-                            <th>المرسل</th>
-                            <th>صاحب الحوالة</th>
-                            <th>الهاتف</th>
-                            <th>حذف</th>
+                            <th>التاريخ</th><th>رقم البوليصة</th><th>الرحلة</th><th>المرسل إليه</th><th>السائق</th><th>البضاعة</th><th>الطرد</th><th>الوزن</th><th>الأجور</th><th>الحوالة</th><th>المرسل</th><th>صاحب الحوالة</th><th>الهاتف</th><th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody id="shamTableBody">
-                        <tr><td colspan="14" style="color:var(--sub-text);">لا توجد بوليصات مسجلة حالياً</td></tr>
-                    </tbody>
+                    <tbody id="shamTableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -151,141 +89,90 @@
     <script>
         let shamRecords = JSON.parse(localStorage.getItem("sham_advanced_records")) || [];
 
-        function updateDateTimeDisplay() {
-            let now = new Date();
-            let options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
-            let dateStr = now.toLocaleDateString('ar-SY', options);
-            let display = document.getElementById("currentDateDisplay");
-            if(display) display.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dateStr}`;
-        }
-
         function renderShamTable() {
+            let filter = document.getElementById("searchBox").value.toLowerCase();
             let tbody = document.getElementById("shamTableBody");
-            if(!tbody) return;
             tbody.innerHTML = "";
 
-            if(shamRecords.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="14" style="color:var(--sub-text);">لا توجد بوليصات مسجلة حالياً</td></tr>`;
-                document.getElementById("totalWeightBox").innerText = "إجمالي الأوزان: 0 كغ";
-                document.getElementById("totalCountBox").innerText = "إجمالي البوليصات: 0";
-                return;
-            }
+            let filtered = shamRecords.filter(r => 
+                r.receiver.toLowerCase().includes(filter) || 
+                r.opNum.toLowerCase().includes(filter)
+            );
 
             let totalWeight = 0;
-            shamRecords.forEach((r, index) => {
+            filtered.forEach((r, index) => {
                 totalWeight += parseFloat(r.weight || 0);
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="font-size:10px; color:var(--sub-text);">${r.dateTime}</td>
-                        <td><span class="receipt-code">${r.opNum}</span></td>
-                        <td><b>${r.tripDirection}</b></td>
-                        <td><b>${r.receiver}</b></td>
-                        <td>${r.driver || '-'}</td>
-                        <td>${r.material || '-'}</td>
-                        <td>${r.boxType || '-'}</td>
-                        <td>${r.weight ? r.weight + ' كغ' : '-'}</td>
-                        <td>${r.freightCost || '-'}</td>
-                        <td>${r.transferAmount || '-'}</td>
-                        <td>${r.senderName || '-'}</td>
-                        <td>${r.transferOwner || '-'}</td>
-                        <td>${r.senderPhone || '-'}</td>
-                        <td><button onclick="deleteShamRecord(${index})" class="badge-red"><i class="fas fa-trash"></i></button></td>
-                    </tr>`;
+                tbody.innerHTML += `<tr>
+                    <td style="font-size:10px;">${r.dateTime}</td>
+                    <td><span class="receipt-code">${r.opNum}</span></td>
+                    <td>${r.tripDirection}</td><td><b>${r.receiver}</b></td><td>${r.driver}</td>
+                    <td>${r.material}</td><td>${r.boxType}</td><td>${r.weight} كغ</td>
+                    <td>${r.freightCost}</td><td>${r.transferAmount}</td>
+                    <td>${r.senderName}</td><td>${r.transferOwner}</td><td>${r.senderPhone}</td>
+                    <td><button onclick="deleteShamRecord(${index})" class="badge-red">X</button></td>
+                </tr>`;
             });
 
             document.getElementById("totalWeightBox").innerText = `إجمالي الأوزان: ${totalWeight.toFixed(1)} كغ`;
-            document.getElementById("totalCountBox").innerText = `إجمالي البوليصات: ${shamRecords.length}`;
+            document.getElementById("totalCountBox").innerText = `إجمالي البوليصات: ${filtered.length}`;
         }
 
         function addShamShipment() {
             let opNum = document.getElementById("shamOpNum").value.trim();
             let receiver = document.getElementById("shamReceiver").value.trim();
-            
-            if(!opNum || !receiver) { 
-                alert("الرجاء إدخال رقم البوليصة واسم المرسل إليه على الأقل!"); 
-                return; 
-            }
+            if(!opNum || !receiver) { alert("الرجاء إدخال البوليصة والاسم!"); return; }
 
             let now = new Date();
-            let dateTime = now.toLocaleDateString('ar-SY') + ' (' + now.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) + ')';
-
-            let newRecord = {
-                dateTime: dateTime,
+            let record = {
+                dateTime: now.toLocaleDateString('ar-SY') + ' ' + now.getHours() + ':' + now.getMinutes(),
                 opNum: opNum,
                 tripDirection: document.getElementById("shamTripDirection").value,
                 receiver: receiver,
-                driver: document.getElementById("shamDriver").value.trim(),
-                material: document.getElementById("shamMaterial").value.trim(),
-                boxType: document.getElementById("shamBoxType").value.trim(),
-                weight: document.getElementById("shamWeight").value.trim(),
-                freightCost: document.getElementById("shamFreightCost").value.trim(),
-                transferAmount: document.getElementById("shamTransferAmount").value.trim(),
-                senderName: document.getElementById("shamSenderName").value.trim(),
-                transferOwner: document.getElementById("shamTransferOwner").value.trim(),
-                senderPhone: document.getElementById("shamSenderPhone").value.trim()
+                driver: document.getElementById("shamDriver").value,
+                material: document.getElementById("shamMaterial").value,
+                boxType: document.getElementById("shamBoxType").value,
+                weight: document.getElementById("shamWeight").value,
+                freightCost: document.getElementById("shamFreightCost").value,
+                transferAmount: document.getElementById("shamTransferAmount").value,
+                senderName: document.getElementById("shamSenderName").value,
+                transferOwner: document.getElementById("shamTransferOwner").value,
+                senderPhone: document.getElementById("shamSenderPhone").value
             };
 
-            shamRecords.unshift(newRecord);
+            shamRecords.unshift(record);
             localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
-
-            // تفريغ الحقول بعد الحفظ
-            document.getElementById("shamOpNum").value = "";
-            document.getElementById("shamReceiver").value = "";
-            document.getElementById("shamDriver").value = "";
-            document.getElementById("shamMaterial").value = "";
-            document.getElementById("shamBoxType").value = "";
-            document.getElementById("shamWeight").value = "";
-            document.getElementById("shamFreightCost").value = "";
-            document.getElementById("shamTransferAmount").value = "";
-            document.getElementById("shamSenderName").value = "";
-            document.getElementById("shamTransferOwner").value = "";
-            document.getElementById("shamSenderPhone").value = "";
-
             renderShamTable();
         }
 
         function deleteShamRecord(index) {
-            if(confirm("هل أنت متأكد من حذف هذه البوليصة نهائياً؟")) {
+            if(confirm("حذف؟")) {
                 shamRecords.splice(index, 1);
                 localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
                 renderShamTable();
             }
         }
 
-        // زر لبدء مانيفست جديد (تصفير الشاشة للرحلة أو اليوم الجديد)
         function startNewManifest() {
-            if(shamRecords.length > 0) {
-                let confirmExport = confirm("هل قامت بتصدير المانيفست الحالي إلى إكسل قبل البدء بمانيفست جديد؟\n(اضغط موافق لتفريغ الشاشة للرحلة الجديدة)");
-                if(!confirmExport) return;
+            if(confirm("تفريغ المانيفست؟")) {
+                shamRecords = [];
+                localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
+                renderShamTable();
             }
-            shamRecords = [];
-            localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
-            renderShamTable();
-            alert("تم تصفير الشاشة بنجاح، جاهزون لادخال مانيفست ورحلة جديدة تماماً!");
         }
 
         function exportShamToExcel() {
-            if(shamRecords.length === 0) { 
-                alert("لا توجد بيانات لتصديرها للأرشيف!"); 
-                return; 
-            }
-            
-            let csv = "\uFEFFالتاريخ والوقت,رقم البوليصة,الرحلة,المرسل إليه,السائق / مركز الكلفة,نوع البضاعة,نوع الطرد,الوزن,أجور الشحن,قيمة الحوالة,المرسل,صاحب الحوالة,هاتف المرسل\n";
+            let csv = "\uFEFFالتاريخ,رقم البوليصة,الرحلة,المرسل إليه,السائق,نوع البضاعة,الطرد,الوزن,الأجور,الحوالة,المرسل,صاحب الحوالة,هاتف المرسل\n";
             shamRecords.forEach(r => {
-                csv += `"${r.dateTime}","${r.opNum}","${r.tripDirection}","${r.receiver}","${r.driver || ''}","${r.material || ''}","${r.boxType || ''}","${r.weight || ''}","${r.freightCost || ''}","${r.transferAmount || ''}","${r.senderName || ''}","${r.transferOwner || ''}","${r.senderPhone || ''}"\n`;
+                csv += `"${r.dateTime}","${r.opNum}","${r.tripDirection}","${r.receiver}","${r.driver}","${r.material}","${r.boxType}","${r.weight}","${r.freightCost}","${r.transferAmount}","${r.senderName}","${r.transferOwner}","${r.senderPhone}"\n`;
             });
-
             let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = `Manifest_${new Date().toISOString().slice(0,10)}.csv`;
-            document.body.appendChild(a);
+            a.download = "Manifest.csv";
             a.click();
-            document.body.removeChild(a);
         }
 
-        updateDateTimeDisplay();
         renderShamTable();
     </script>
 </body>
