@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشام للشحن</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --bg-color: #f0f4f8; --card-bg: #ffffff; --text-main: #1e293b; --accent-blue: #1d4ed8; --accent-gold: #ca8a04; --success: #10b981; --border-color: #cbd5e1; }
+        body { font-family: sans-serif; background-color: var(--bg-color); padding: 10px; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
+        input { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; margin-top: 5px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+        .btn-success { background: var(--success); }
+        .btn-excel { background: var(--accent-gold); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>إدخال بوليصة</h3>
+        <input type="text" id="opNum" placeholder="رقم البوليصة">
+        <input type="text" id="receiver" placeholder="مرسل إليه">
+        <button class="btn btn-success" onclick="add()">حفظ</button>
+        <button class="btn btn-excel" onclick="exportExcel()">تصدير Excel</button>
+        <table id="table"><thead><tr><th>البوليصة</th><th>المرسل إليه</th></tr></thead><tbody></tbody></table>
+    </div>
+    <script>
+        let data = JSON.parse(localStorage.getItem("data") || "[]");
+        function add() {
+            data.unshift({ opNum: document.getElementById("opNum").value, receiver: document.getElementById("receiver").value });
+            localStorage.setItem("data", JSON.stringify(data));
+            render();
+        }
+        function render() {
+            let tbody = document.querySelector("#table tbody");
+            tbody.innerHTML = data.map(r => `<tr><td>${r.opNum}</td><td>${r.receiver}</td></tr>`).join("");
+        }
+        function exportExcel() {
+            let csv = "\uFEFFرقم البوليصة,مرسل إليه\n" + data.map(r => `"${r.opNum}","${r.receiver}"`).join("\n");
+            let a = document.createElement('a');
+            a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+            a.download = "data.csv";
+            a.click();
+        }
+        render();
+    </script>
+</body>
+</html>
