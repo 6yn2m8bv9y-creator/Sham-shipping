@@ -15,7 +15,8 @@
         .form-group { text-align: right; }
         label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px; color: var(--text-main); }
         input, select { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-size: 13px; background: #fff; color: var(--text-main); outline: none; }
-        .search-box { width: 100%; padding: 10px; border: 2px solid var(--accent-blue); border-radius: 8px; margin-bottom: 10px; font-size: 14px; }
+        .filter-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .search-box { width: 100%; padding: 10px; border: 2px solid var(--accent-blue); border-radius: 8px; font-size: 14px; }
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
         .btn { background: var(--accent-blue); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 140px; }
         .btn-success { background: var(--success); }
@@ -71,7 +72,11 @@
                 </div>
             </div>
 
-            <input type="text" id="searchBox" class="search-box" placeholder="🔍 ابحث هنا بالاسم أو رقم البوليصة..." onkeyup="renderShamTable()">
+            <!-- خانات الفلترة الجديدة -->
+            <div class="filter-section">
+                <input type="text" id="searchBox" class="search-box" placeholder="🔍 بحث بالاسم أو البوليصة..." onkeyup="renderShamTable()">
+                <input type="text" id="driverFilter" class="search-box" placeholder="🚚 بحث حسب السائق..." onkeyup="renderShamTable()">
+            </div>
             
             <div class="table-responsive">
                 <table>
@@ -91,12 +96,13 @@
 
         function renderShamTable() {
             let filter = document.getElementById("searchBox").value.toLowerCase();
+            let driverFilter = document.getElementById("driverFilter").value.toLowerCase();
             let tbody = document.getElementById("shamTableBody");
             tbody.innerHTML = "";
 
             let filtered = shamRecords.filter(r => 
-                r.receiver.toLowerCase().includes(filter) || 
-                r.opNum.toLowerCase().includes(filter)
+                (r.receiver.toLowerCase().includes(filter) || r.opNum.toLowerCase().includes(filter)) &&
+                (r.driver.toLowerCase().includes(driverFilter))
             );
 
             let totalWeight = 0;
