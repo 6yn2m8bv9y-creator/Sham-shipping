@@ -19,6 +19,7 @@
         .btn { background: var(--accent-blue); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 140px; }
         .btn-success { background: var(--success); }
         .btn-excel { background: var(--accent-gold); }
+        .btn-new-manifest { background: #475569; }
         .stats-box { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
         .stat-card { background: #e0e7ff; padding: 10px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; color: #1e3a8a; border: 1px solid #c7d2fe; }
         .table-responsive { width: 100%; overflow-x: auto; margin-top: 10px; }
@@ -112,12 +113,13 @@
 
                 <div class="btn-group">
                     <button class="btn btn-success" onclick="addShamShipment()"><i class="fas fa-plus"></i> حفظ البوليصة</button>
-                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل أرشيف احترافي</button>
+                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل أرشيف</button>
+                    <button class="btn btn-new-manifest" onclick="startNewManifest()"><i class="fas fa-sync-alt"></i> مانيفست جديد (تفريغ الشاشة)</button>
                 </div>
             </div>
 
             <!-- جدول العرض -->
-            <h4 style="margin-bottom: 5px; color: var(--accent-blue); font-size: 12px;"><i class="fas fa-list"></i> سجل البوليصات والرحلات</h4>
+            <h4 style="margin-bottom: 5px; color: var(--accent-blue); font-size: 12px;"><i class="fas fa-list"></i> سجل البوليصات والرحلات الحالية</h4>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -149,7 +151,6 @@
     <script>
         let shamRecords = JSON.parse(localStorage.getItem("sham_advanced_records")) || [];
 
-        // عرض التاريخ واليوم الحالي تلقائياً
         function updateDateTimeDisplay() {
             let now = new Date();
             let options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
@@ -241,7 +242,6 @@
             document.getElementById("shamSenderPhone").value = "";
 
             renderShamTable();
-            alert("تمت حفظ البوليصة بنجاح وإضافتها للسجل الاحترافي!");
         }
 
         function deleteShamRecord(index) {
@@ -252,7 +252,18 @@
             }
         }
 
-        // تصدير إكسل أرشيف احترافي متوافق مع كافة البرامج
+        // زر لبدء مانيفست جديد (تصفير الشاشة للرحلة أو اليوم الجديد)
+        function startNewManifest() {
+            if(shamRecords.length > 0) {
+                let confirmExport = confirm("هل قامت بتصدير المانيفست الحالي إلى إكسل قبل البدء بمانيفست جديد؟\n(اضغط موافق لتفريغ الشاشة للرحلة الجديدة)");
+                if(!confirmExport) return;
+            }
+            shamRecords = [];
+            localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
+            renderShamTable();
+            alert("تم تصفير الشاشة بنجاح، جاهزون لادخال مانيفست ورحلة جديدة تماماً!");
+        }
+
         function exportShamToExcel() {
             if(shamRecords.length === 0) { 
                 alert("لا توجد بيانات لتصديرها للأرشيف!"); 
@@ -268,7 +279,7 @@
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = `Sham_Archive_${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `Manifest_${new Date().toISOString().slice(0,10)}.csv`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
