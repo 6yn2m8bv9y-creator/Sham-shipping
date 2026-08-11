@@ -15,8 +15,8 @@
         .form-group { text-align: right; }
         label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px; color: var(--text-main); }
         input, select { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-size: 13px; background: #fff; color: var(--text-main); outline: none; }
-        .filter-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .search-box { width: 100%; padding: 10px; border: 2px solid var(--accent-blue); border-radius: 8px; font-size: 14px; }
+        .filter-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 12px; background: #f1f5f9; padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .search-box { width: 100%; padding: 8px; border: 1px solid var(--accent-blue); border-radius: 8px; font-size: 13px; background: #fff; }
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
         .btn { background: var(--accent-blue); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 140px; }
         .btn-success { background: var(--success); }
@@ -39,7 +39,7 @@
             <div class="app-header">
                 <div>
                     <h2 style="margin:0; font-size: 15px;">الشام للشحن - العالمية</h2>
-                    <span style="font-size: 11px; color: var(--sub-text); font-weight: 600;">نظام إدارة البوليصات</span>
+                    <span style="font-size: 11px; color: var(--sub-text); font-weight: 600;">نظام إدارة البوليصات المتقدم</span>
                 </div>
                 <div id="currentDateDisplay" style="font-size: 12px; font-weight: bold; color: var(--accent-blue);"></div>
             </div>
@@ -50,11 +50,11 @@
             </div>
 
             <div style="background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 12px;">
-                <h4 style="margin-top:0; color:var(--accent-blue); font-size:13px;"><i class="fas fa-plus-circle"></i> إضافة بوليصة</h4>
+                <h4 style="margin-top:0; color:var(--accent-blue); font-size:13px;"><i class="fas fa-plus-circle"></i> إضافة بوليصة جديدة</h4>
                 <div class="form-grid">
                     <input type="text" id="shamOpNum" placeholder="رقم البوليصة">
                     <select id="shamTripDirection"><option value="دمشق">دمشق</option><option value="حلب">حلب</option></select>
-                    <input type="text" id="shamReceiver" placeholder="اسم المرسل إليه">
+                    <input type="text" id="shamReceiver" placeholder="المرسل إليه (الزبون)">
                     <input type="text" id="shamDriver" placeholder="السائق / مركز الكلفة">
                     <input type="text" id="shamMaterial" placeholder="نوع البضاعة">
                     <input type="text" id="shamBoxType" placeholder="نوع الطرد">
@@ -72,17 +72,40 @@
                 </div>
             </div>
 
-            <!-- خانات الفلترة الجديدة -->
+            <!-- قسم الفلاتر المتقدمة (حسب الزبون، السائق، التاريخ) -->
             <div class="filter-section">
-                <input type="text" id="searchBox" class="search-box" placeholder="🔍 بحث بالاسم أو البوليصة..." onkeyup="renderShamTable()">
-                <input type="text" id="driverFilter" class="search-box" placeholder="🚚 بحث حسب السائق..." onkeyup="renderShamTable()">
+                <div class="form-group" style="margin:0;">
+                    <label><i class="fas fa-filter"></i> فلترة حسب الزبون (المرسل إليه):</label>
+                    <input type="text" id="searchCustomer" class="search-box" placeholder="ابحث باسم الزبون..." onkeyup="renderShamTable()">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label><i class="fas fa-truck"></i> فلترة حسب السائق / المركز:</label>
+                    <input type="text" id="searchDriver" class="search-box" placeholder="ابحث باسم السائق..." onkeyup="renderShamTable()">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label><i class="fas fa-calendar"></i> فلترة حسب التاريخ:</label>
+                    <input type="date" id="searchDate" class="search-box" onchange="renderShamTable()">
+                </div>
             </div>
             
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th>التاريخ</th><th>رقم البوليصة</th><th>الرحلة</th><th>المرسل إليه</th><th>السائق</th><th>البضاعة</th><th>الطرد</th><th>الوزن</th><th>الأجور</th><th>الحوالة</th><th>المرسل</th><th>صاحب الحوالة</th><th>الهاتف</th><th>حذف</th>
+                            <th>التاريخ والوقت</th>
+                            <th>رقم البوليصة</th>
+                            <th>الرحلة</th>
+                            <th>المرسل إليه (الزبون)</th>
+                            <th>السائق / المركز</th>
+                            <th>البضاعة</th>
+                            <th>الطرد</th>
+                            <th>الوزن</th>
+                            <th>الأجور</th>
+                            <th>الحوالة</th>
+                            <th>المرسل</th>
+                            <th>صاحب الحوالة</th>
+                            <th>الهاتف</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
                     <tbody id="shamTableBody"></tbody>
@@ -94,28 +117,53 @@
     <script>
         let shamRecords = JSON.parse(localStorage.getItem("sham_advanced_records")) || [];
 
+        function updateDateTimeDisplay() {
+            let now = new Date();
+            let options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
+            let display = document.getElementById("currentDateDisplay");
+            if(display) display.innerHTML = `<i class="fas fa-calendar-alt"></i> ${now.toLocaleDateString('ar-SY', options)}`;
+        }
+
         function renderShamTable() {
-            let filter = document.getElementById("searchBox").value.toLowerCase();
-            let driverFilter = document.getElementById("driverFilter").value.toLowerCase();
+            let custFilter = document.getElementById("searchCustomer").value.toLowerCase();
+            let driverFilter = document.getElementById("searchDriver").value.toLowerCase();
+            let dateFilter = document.getElementById("searchDate").value; // صيغة التاريخ yyyy-mm-dd
+            
             let tbody = document.getElementById("shamTableBody");
             tbody.innerHTML = "";
 
-            let filtered = shamRecords.filter(r => 
-                (r.receiver.toLowerCase().includes(filter) || r.opNum.toLowerCase().includes(filter)) &&
-                (r.driver.toLowerCase().includes(driverFilter))
-            );
+            let filtered = shamRecords.filter(r => {
+                let matchCust = r.receiver.toLowerCase().includes(custFilter) || r.opNum.toLowerCase().includes(custFilter);
+                let matchDriver = r.driver.toLowerCase().includes(driverFilter);
+                
+                // مطابقة التاريخ إذا تم اختياره
+                let matchDate = true;
+                if(dateFilter) {
+                    // r.rawDate مخزن بصيغة yyyy-mm-dd للمقارنة الدقيقة
+                    matchDate = r.rawDate === dateFilter;
+                }
+
+                return matchCust && matchDriver && matchDate;
+            });
 
             let totalWeight = 0;
             filtered.forEach((r, index) => {
                 totalWeight += parseFloat(r.weight || 0);
                 tbody.innerHTML += `<tr>
-                    <td style="font-size:10px;">${r.dateTime}</td>
+                    <td style="font-size:10px; color:var(--sub-text);">${r.dateTime}</td>
                     <td><span class="receipt-code">${r.opNum}</span></td>
-                    <td>${r.tripDirection}</td><td><b>${r.receiver}</b></td><td>${r.driver}</td>
-                    <td>${r.material}</td><td>${r.boxType}</td><td>${r.weight} كغ</td>
-                    <td>${r.freightCost}</td><td>${r.transferAmount}</td>
-                    <td>${r.senderName}</td><td>${r.transferOwner}</td><td>${r.senderPhone}</td>
-                    <td><button onclick="deleteShamRecord(${index})" class="badge-red">X</button></td>
+                    <td><b>${r.tripDirection}</b></td>
+                    <td><b>${r.receiver}</b></td>
+                    <td>${r.driver || '-'}</td>
+                    <td>${r.material || '-'}</td>
+                    <td>${r.boxType || '-'}</td>
+                    <td>${r.weight ? r.weight + ' كغ' : '-'}</td>
+                    <td>${r.freightCost || '-'}</td>
+                    <td>${r.transferAmount || '-'}</td>
+                    <td>${r.senderName || '-'}</td>
+                    <td>${r.transferOwner || '-'}</td>
+                    <td>${r.senderPhone || '-'}</td>
+                    <td><button onclick="deleteShamRecord(${index})" class="badge-red"><i class="fas fa-trash"></i></button></td>
                 </tr>`;
             });
 
@@ -126,32 +174,50 @@
         function addShamShipment() {
             let opNum = document.getElementById("shamOpNum").value.trim();
             let receiver = document.getElementById("shamReceiver").value.trim();
-            if(!opNum || !receiver) { alert("الرجاء إدخال البوليصة والاسم!"); return; }
+            if(!opNum || !receiver) { alert("الرجاء إدخال رقم البوليصة واسم المرسل إليه على الأقل!"); return; }
 
             let now = new Date();
+            let dateTimeStr = now.toLocaleDateString('ar-SY') + ' (' + now.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) + ')';
+            let rawDateStr = now.toISOString().slice(0, 10); // للحفظ بصيغة يسهل فلترتها
+
             let record = {
-                dateTime: now.toLocaleDateString('ar-SY') + ' ' + now.getHours() + ':' + now.getMinutes(),
+                dateTime: dateTimeStr,
+                rawDate: rawDateStr,
                 opNum: opNum,
                 tripDirection: document.getElementById("shamTripDirection").value,
                 receiver: receiver,
-                driver: document.getElementById("shamDriver").value,
-                material: document.getElementById("shamMaterial").value,
-                boxType: document.getElementById("shamBoxType").value,
-                weight: document.getElementById("shamWeight").value,
-                freightCost: document.getElementById("shamFreightCost").value,
-                transferAmount: document.getElementById("shamTransferAmount").value,
-                senderName: document.getElementById("shamSenderName").value,
-                transferOwner: document.getElementById("shamTransferOwner").value,
-                senderPhone: document.getElementById("shamSenderPhone").value
+                driver: document.getElementById("shamDriver").value.trim(),
+                material: document.getElementById("shamMaterial").value.trim(),
+                boxType: document.getElementById("shamBoxType").value.trim(),
+                weight: document.getElementById("shamWeight").value.trim(),
+                freightCost: document.getElementById("shamFreightCost").value.trim(),
+                transferAmount: document.getElementById("shamTransferAmount").value.trim(),
+                senderName: document.getElementById("shamSenderName").value.trim(),
+                transferOwner: document.getElementById("shamTransferOwner").value.trim(),
+                senderPhone: document.getElementById("shamSenderPhone").value.trim()
             };
 
             shamRecords.unshift(record);
             localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
+            
+            // تفريغ الحقول بعد الإدخال
+            document.getElementById("shamOpNum").value = "";
+            document.getElementById("shamReceiver").value = "";
+            document.getElementById("shamDriver").value = "";
+            document.getElementById("shamMaterial").value = "";
+            document.getElementById("shamBoxType").value = "";
+            document.getElementById("shamWeight").value = "";
+            document.getElementById("shamFreightCost").value = "";
+            document.getElementById("shamTransferAmount").value = "";
+            document.getElementById("shamSenderName").value = "";
+            document.getElementById("shamTransferOwner").value = "";
+            document.getElementById("shamSenderPhone").value = "";
+
             renderShamTable();
         }
 
         function deleteShamRecord(index) {
-            if(confirm("حذف؟")) {
+            if(confirm("هل أنت متأكد من حذف هذه البوليصة؟")) {
                 shamRecords.splice(index, 1);
                 localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
                 renderShamTable();
@@ -159,7 +225,7 @@
         }
 
         function startNewManifest() {
-            if(confirm("تفريغ المانيفست؟")) {
+            if(confirm("هل أنت متأكد من بدء مانيفست جديد وتفريغ الشاشة؟")) {
                 shamRecords = [];
                 localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
                 renderShamTable();
@@ -167,18 +233,20 @@
         }
 
         function exportShamToExcel() {
-            let csv = "\uFEFFالتاريخ,رقم البوليصة,الرحلة,المرسل إليه,السائق,نوع البضاعة,الطرد,الوزن,الأجور,الحوالة,المرسل,صاحب الحوالة,هاتف المرسل\n";
+            if(shamRecords.length === 0) { alert("لا توجد بيانات للتصدير!"); return; }
+            let csv = "\uFEFFالتاريخ والوقت,رقم البوليصة,الرحلة,المرسل إليه,السائق,نوع البضاعة,الطرد,الوزن,الأجور,الحوالة,المرسل,صاحب الحوالة,هاتف المرسل\n";
             shamRecords.forEach(r => {
-                csv += `"${r.dateTime}","${r.opNum}","${r.tripDirection}","${r.receiver}","${r.driver}","${r.material}","${r.boxType}","${r.weight}","${r.freightCost}","${r.transferAmount}","${r.senderName}","${r.transferOwner}","${r.senderPhone}"\n`;
+                csv += `"${r.dateTime}","${r.opNum}","${r.tripDirection}","${r.receiver}","${r.driver || ''}","${r.material || ''}","${r.boxType || ''}","${r.weight || ''}","${r.freightCost || ''}","${r.transferAmount || ''}","${r.senderName || ''}","${r.transferOwner || ''}","${r.senderPhone || ''}"\n`;
             });
             let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = "Manifest.csv";
+            a.download = `Manifest_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
         }
 
+        updateDateTimeDisplay();
         renderShamTable();
     </script>
 </body>
