@@ -3,48 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الشام للشحن</title>
+    <title>شركة العالمية - الشام للشحن</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --bg-color: #f0f4f8; --card-bg: #ffffff; --text-main: #1e293b; --accent-blue: #1d4ed8; --accent-gold: #ca8a04; --success: #10b981; --border-color: #cbd5e1; }
-        body { font-family: sans-serif; background-color: var(--bg-color); padding: 10px; }
-        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
-        input { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; margin-top: 5px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+        :root { --bg-color: #f0f4f8; --card-bg: #ffffff; --text-main: #1e293b; --accent-blue: #1d4ed8; --accent-gold: #ca8a04; --success: #10b981; --danger: #ef4444; --border-color: #cbd5e1; --sub-text: #64748b; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 10px; direction: rtl; }
+        .container { max-width: 1200px; margin: auto; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); margin-bottom: 15px; }
+        .app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .form-group { text-align: right; }
+        label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px; color: var(--text-main); }
+        input, select { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-size: 13px; background: #fff; color: var(--text-main); outline: none; }
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .btn { background: var(--accent-blue); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 140px; }
         .btn-success { background: var(--success); }
         .btn-excel { background: var(--accent-gold); }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .stats-box { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+        .stat-card { background: #e0e7ff; padding: 10px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; color: #1e3a8a; border: 1px solid #c7d2fe; }
+        .table-responsive { width: 100%; overflow-x: auto; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); min-width: 1100px; }
+        th, td { border-bottom: 1px solid var(--border-color); padding: 8px; text-align: center; font-size: 11px; }
+        th { background: #e0e7ff; color: #1e3a8a; font-weight: 700; }
+        .receipt-code { font-family: monospace; background: #dbeafe; padding: 3px 6px; border-radius: 6px; font-weight: bold; color: var(--accent-blue); }
+        .badge-red { color: var(--danger); background: #fee2e2; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 11px; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h3>إدخال بوليصة</h3>
-        <input type="text" id="opNum" placeholder="رقم البوليصة">
-        <input type="text" id="receiver" placeholder="مرسل إليه">
-        <button class="btn btn-success" onclick="add()">حفظ</button>
-        <button class="btn btn-excel" onclick="exportExcel()">تصدير Excel</button>
-        <table id="table"><thead><tr><th>البوليصة</th><th>المرسل إليه</th></tr></thead><tbody></tbody></table>
+
+    <div class="container">
+        <div class="card">
+            <div class="app-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <div>
+                        <h2 style="margin:0; font-size: 15px;">الشام للشحن - العالمية</h2>
+                        <span style="font-size: 11px; color: var(--sub-text); font-weight: 600;">نظام إدارة البوليصات المتقدم</span>
+                    </div>
+                </div>
+                <div id="currentDateDisplay" style="font-size: 12px; font-weight: bold; color: var(--accent-blue);"></div>
+            </div>
+
+            <!-- لوحة الإحصائيات والأوزان الإجمالية -->
+            <div class="stats-box">
+                <div class="stat-card" id="totalWeightBox">إجمالي الأوزان: 0 كغ</div>
+                <div class="stat-card" id="totalCountBox">إجمالي البوليصات: 0</div>
+            </div>
+
+            <!-- نموذج الإدخال الشامل -->
+            <div style="background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 12px;">
+                <h4 style="margin-top:0; color:var(--accent-blue); font-size:13px;"><i class="fas fa-plus-circle"></i> إضافة بوليصة جديدة</h4>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>رقم البوليصة:</label>
+                        <input type="text" id="shamOpNum" placeholder="مثال: 1005">
+                    </div>
+                    <div class="form-group">
+                        <label>خط الرحلة:</label>
+                        <select id="shamTripDirection">
+                            <option value="دمشق">دمشق</option>
+                            <option value="حلب">حلب</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المرسل إليه:</label>
+                        <input type="text" id="shamReceiver" placeholder="اسم المرسل إليه">
+                    </div>
+                    <div class="form-group">
+                        <label>السائق / مركز الكلفة:</label>
+                        <input type="text" id="shamDriver" placeholder="اسم السائق أو المركز">
+                    </div>
+                    <div class="form-group">
+                        <label>نوع البضاعة:</label>
+                        <input type="text" id="shamMaterial" placeholder="مثال: إلكترونيات، أقمشة...">
+                    </div>
+                    <div class="form-group">
+                        <label>نوع الطرد:</label>
+                        <input type="text" id="shamBoxType" placeholder="كرتونة / شوال / برميل">
+                    </div>
+                    <div class="form-group">
+                        <label>الوزن (كغ):</label>
+                        <input type="number" step="0.1" id="shamWeight" placeholder="0.0">
+                    </div>
+                    <div class="form-group">
+                        <label>أجور الشحن:</label>
+                        <input type="number" id="shamFreightCost" placeholder="المبلغ">
+                    </div>
+                    <div class="form-group">
+                        <label>قيمة الحوالة (إن وجدت):</label>
+                        <input type="number" id="shamTransferAmount" placeholder="قيمة الحوالة">
+                    </div>
+                    <div class="form-group">
+                        <label>اسم المرسل:</label>
+                        <input type="text" id="shamSenderName" placeholder="اسم المرسل">
+                    </div>
+                    <div class="form-group">
+                        <label>صاحب الحوالة:</label>
+                        <input type="text" id="shamTransferOwner" placeholder="اسم صاحب الحوالة">
+                    </div>
+                    <div class="form-group">
+                        <label>رقم هاتف المرسل:</label>
+                        <input type="text" id="shamSenderPhone" placeholder="رقم للتواصل">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="addShamShipment()"><i class="fas fa-plus"></i> حفظ البوليصة</button>
+                    <button class="btn btn-excel" onclick="exportShamToExcel()"><i class="fas fa-file-excel"></i> تصدير إكسل أرشيف احترافي</button>
+                </div>
+            </div>
+
+            <!-- جدول العرض -->
+            <h4 style="margin-bottom: 5px; color: var(--accent-blue); font-size: 12px;"><i class="fas fa-list"></i> سجل البوليصات والرحلات</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>التاريخ / اليوم</th>
+                            <th>رقم البوليصة</th>
+                            <th>الرحلة</th>
+                            <th>مرسل إليه</th>
+                            <th>السائق / مركز الكلفة</th>
+                            <th>نوع البضاعة</th>
+                            <th>الطرد</th>
+                            <th>الوزن</th>
+                            <th>أجور الشحن</th>
+                            <th>الحوالة</th>
+                            <th>المرسل</th>
+                            <th>صاحب الحوالة</th>
+                            <th>الهاتف</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shamTableBody">
+                        <tr><td colspan="14" style="color:var(--sub-text);">لا توجد بوليصات مسجلة حالياً</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
     <script>
-        let data = JSON.parse(localStorage.getItem("data") || "[]");
-        function add() {
-            data.unshift({ opNum: document.getElementById("opNum").value, receiver: document.getElementById("receiver").value });
-            localStorage.setItem("data", JSON.stringify(data));
-            render();
+        let shamRecords = JSON.parse(localStorage.getItem("sham_advanced_records")) || [];
+
+        // عرض التاريخ واليوم الحالي تلقائياً
+        function updateDateTimeDisplay() {
+            let now = new Date();
+            let options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
+            let dateStr = now.toLocaleDateString('ar-SY', options);
+            let display = document.getElementById("currentDateDisplay");
+            if(display) display.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dateStr}`;
         }
-        function render() {
-            let tbody = document.querySelector("#table tbody");
-            tbody.innerHTML = data.map(r => `<tr><td>${r.opNum}</td><td>${r.receiver}</td></tr>`).join("");
+
+        function renderShamTable() {
+            let tbody = document.getElementById("shamTableBody");
+            if(!tbody) return;
+            tbody.innerHTML = "";
+
+            if(shamRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="14" style="color:var(--sub-text);">لا توجد بوليصات مسجلة حالياً</td></tr>`;
+                document.getElementById("totalWeightBox").innerText = "إجمالي الأوزان: 0 كغ";
+                document.getElementById("totalCountBox").innerText = "إجمالي البوليصات: 0";
+                return;
+            }
+
+            let totalWeight = 0;
+            shamRecords.forEach((r, index) => {
+                totalWeight += parseFloat(r.weight || 0);
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-size:10px; color:var(--sub-text);">${r.dateTime}</td>
+                        <td><span class="receipt-code">${r.opNum}</span></td>
+                        <td><b>${r.tripDirection}</b></td>
+                        <td><b>${r.receiver}</b></td>
+                        <td>${r.driver || '-'}</td>
+                        <td>${r.material || '-'}</td>
+                        <td>${r.boxType || '-'}</td>
+                        <td>${r.weight ? r.weight + ' كغ' : '-'}</td>
+                        <td>${r.freightCost || '-'}</td>
+                        <td>${r.transferAmount || '-'}</td>
+                        <td>${r.senderName || '-'}</td>
+                        <td>${r.transferOwner || '-'}</td>
+                        <td>${r.senderPhone || '-'}</td>
+                        <td><button onclick="deleteShamRecord(${index})" class="badge-red"><i class="fas fa-trash"></i></button></td>
+                    </tr>`;
+            });
+
+            document.getElementById("totalWeightBox").innerText = `إجمالي الأوزان: ${totalWeight.toFixed(1)} كغ`;
+            document.getElementById("totalCountBox").innerText = `إجمالي البوليصات: ${shamRecords.length}`;
         }
-        function exportExcel() {
-            let csv = "\uFEFFرقم البوليصة,مرسل إليه\n" + data.map(r => `"${r.opNum}","${r.receiver}"`).join("\n");
+
+        function addShamShipment() {
+            let opNum = document.getElementById("shamOpNum").value.trim();
+            let receiver = document.getElementById("shamReceiver").value.trim();
+            
+            if(!opNum || !receiver) { 
+                alert("الرجاء إدخال رقم البوليصة واسم المرسل إليه على الأقل!"); 
+                return; 
+            }
+
+            let now = new Date();
+            let dateTime = now.toLocaleDateString('ar-SY') + ' (' + now.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) + ')';
+
+            let newRecord = {
+                dateTime: dateTime,
+                opNum: opNum,
+                tripDirection: document.getElementById("shamTripDirection").value,
+                receiver: receiver,
+                driver: document.getElementById("shamDriver").value.trim(),
+                material: document.getElementById("shamMaterial").value.trim(),
+                boxType: document.getElementById("shamBoxType").value.trim(),
+                weight: document.getElementById("shamWeight").value.trim(),
+                freightCost: document.getElementById("shamFreightCost").value.trim(),
+                transferAmount: document.getElementById("shamTransferAmount").value.trim(),
+                senderName: document.getElementById("shamSenderName").value.trim(),
+                transferOwner: document.getElementById("shamTransferOwner").value.trim(),
+                senderPhone: document.getElementById("shamSenderPhone").value.trim()
+            };
+
+            shamRecords.unshift(newRecord);
+            localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
+
+            // تفريغ الحقول بعد الحفظ
+            document.getElementById("shamOpNum").value = "";
+            document.getElementById("shamReceiver").value = "";
+            document.getElementById("shamDriver").value = "";
+            document.getElementById("shamMaterial").value = "";
+            document.getElementById("shamBoxType").value = "";
+            document.getElementById("shamWeight").value = "";
+            document.getElementById("shamFreightCost").value = "";
+            document.getElementById("shamTransferAmount").value = "";
+            document.getElementById("shamSenderName").value = "";
+            document.getElementById("shamTransferOwner").value = "";
+            document.getElementById("shamSenderPhone").value = "";
+
+            renderShamTable();
+            alert("تمت حفظ البوليصة بنجاح وإضافتها للسجل الاحترافي!");
+        }
+
+        function deleteShamRecord(index) {
+            if(confirm("هل أنت متأكد من حذف هذه البوليصة نهائياً؟")) {
+                shamRecords.splice(index, 1);
+                localStorage.setItem("sham_advanced_records", JSON.stringify(shamRecords));
+                renderShamTable();
+            }
+        }
+
+        // تصدير إكسل أرشيف احترافي متوافق مع كافة البرامج
+        function exportShamToExcel() {
+            if(shamRecords.length === 0) { 
+                alert("لا توجد بيانات لتصديرها للأرشيف!"); 
+                return; 
+            }
+            
+            let csv = "\uFEFFالتاريخ والوقت,رقم البوليصة,الرحلة,المرسل إليه,السائق / مركز الكلفة,نوع البضاعة,نوع الطرد,الوزن,أجور الشحن,قيمة الحوالة,المرسل,صاحب الحوالة,هاتف المرسل\n";
+            shamRecords.forEach(r => {
+                csv += `"${r.dateTime}","${r.opNum}","${r.tripDirection}","${r.receiver}","${r.driver || ''}","${r.material || ''}","${r.boxType || ''}","${r.weight || ''}","${r.freightCost || ''}","${r.transferAmount || ''}","${r.senderName || ''}","${r.transferOwner || ''}","${r.senderPhone || ''}"\n`;
+            });
+
+            let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
-            a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-            a.download = "data.csv";
+            a.href = url;
+            a.download = `Sham_Archive_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
         }
-        render();
+
+        updateDateTimeDisplay();
+        renderShamTable();
     </script>
 </body>
 </html>
